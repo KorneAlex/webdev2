@@ -1,7 +1,10 @@
+// db_flow_1.1: server setup with db initialization
+
 import { routes } from './routes.js';
 import Hapi from "@hapi/hapi";
 import Handlebars from "handlebars";
 import Vision from "@hapi/vision";
+import { db } from './src/models/db.js';
 
 
 const init = async () => {
@@ -13,6 +16,9 @@ const init = async () => {
 
     server.route(routes);
 
+    // Initialize database
+    await db.init();
+
     await server.register(Vision);
 
     server.views({
@@ -20,10 +26,10 @@ const init = async () => {
             hbs: Handlebars
         },
         relativeTo: ".",
-        path: 'views',
-        partialsPath: './views/partials',
+        path: 'src/views',
+        partialsPath: './src/views/partials',
         layout: true,
-        layoutPath: './views/layouts'
+        layoutPath: './src/views/layouts'
     });
 
     await server.start();

@@ -1,0 +1,32 @@
+{{> header }}
+<h1 class="title">Sing Up Page</h1>
+<p>Create your account to access all features of our web application. Please fill in the required information below to get started.</p>
+<form class="box" method="POST" action="/singup/submit">  
+    <div class="field">
+        <label class="label">Username</label>
+        <div class="control">
+            <input class="input" type="text" name="username" placeholder="Enter your username" required>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+            <input class="input" type="email" name="email" placeholder="Enter your email" required>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+            <input class="input" type="password" name="password" placeholder="Enter your password" required>
+        </div>
+    </div>
+
+    <div class="field">
+        <div class="control">
+            <button type="submit" class="button is-primary">Sign Up</button>
+        </div>
+    </div>
+</form>
+{{> footer }}
