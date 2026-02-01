@@ -20,7 +20,10 @@ const init = async () => {
             hbs: Handlebars
         },
         relativeTo: ".",
-        path: 'views'
+        path: 'views',
+        partialsPath: './views/partials',
+        layout: true,
+        layoutPath: './views/layouts'
     });
 
     await server.start();
