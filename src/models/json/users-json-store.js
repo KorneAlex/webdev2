@@ -7,6 +7,16 @@ export const usersJsonStore = {
     return db.data.users;
   },
 
+  async getUserByEmail(email) {
+    await db.read();
+    return db.data.users.find(user => user.email === email);
+  },
+
+  async getUserByUsername(username) {
+    await db.read();
+    return db.data.users.find(user => user.username === username);
+  },
+
   async addUser(user) {
     await db.read();
     user._id = v4();
