@@ -46,8 +46,6 @@ const init = async () => {
   const cookiePassword = process.env.cookie_password;
 
   server.app.cookieName = cookieName;
-  console.log("COOKIE_NAME: ", server.app.cookieName);
-  console.log("COOKIE_PASS: ", cookiePassword);
 
   server.auth.strategy("session", "cookie", {
     cookie: {

@@ -13,7 +13,7 @@ export const routes = [
     // account pages
     { method: 'GET', path: '/login', handler: accountController.login, options: { auth: false } },
     { method: 'GET', path: '/signup', handler: accountController.signup, options: { auth: false } },
-    { method: 'GET', path: '/signup-success', handler: accountController.signupSuccess, options: { auth: false } },
+    // { method: 'GET', path: '/signup-success', handler: accountController.signupSuccess, options: { auth: false } },
 
     // account actions
     { method: 'POST', path: '/signup/submit', handler: accountController.signupSubmit, options: { auth: false } },
