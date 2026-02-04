@@ -15,8 +15,8 @@
 
 <div class="is-flex is-flex-direction-row is-justify-content-space-between is-align-items-center">
   <button class="button is-primary">Sign in</button>
-  {{#unless viewData.logedIn }}
-  {{> login-failed }}
-  {{/unless}}
+  {{#if viewData.wrongCredentials }}
+  {{> errors/login-failed }}
+  {{/if}}
 </div>
 </form>

@@ -1,2 +1,4 @@
 node_modules/
 src/models/json/db.json
+.env
+test.js

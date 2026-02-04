@@ -2,9 +2,7 @@
   <div class="navbar-brand">
     <a class="navbar-item" href="/">
       {{> svg/logo}}
-
     </a>
-
   </div>
 
   <div id="navbarBasicExample" class="navbar-menu">
@@ -12,9 +10,11 @@
       <a href="/" class="navbar-item">
         Home
       </a>
+      {{#if viewData.isAuthenticated}}
       <a href="/dashboard" class="navbar-item">
         Dashboard
       </a>
+      {{/if}}
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
           More
@@ -25,7 +25,8 @@
             About
           </a>
           <hr class="navbar-divider">
-          <a href="https://github.com/KorneAlex/webdev2/issues" class="navbar-item">
+          {{!-- https://stackoverflow.com/questions/15551779/open-link-in-new-tab-or-window --}}
+          <a target="_blank" rel="noopener noreferrer"href="https://github.com/KorneAlex/webdev2/issues" class="navbar-item">
             Report an issue
           </a>
         </div>
@@ -35,12 +36,18 @@
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
-          <a href="/singup" class="button is-primary">
-            <strong>Sign up</strong>
+          {{#unless viewData.isAuthenticated}}
+          <a href="/signup" class="button is-primary">
+            <strong>Sign up {{viewData.username}}</strong>
           </a>
           <a href="/login" class="button is-light">
             Log in
           </a>
+          {{else}}
+          <a href="/logout" class="button is-light">
+            Log out
+          </a>
+          {{/unless}}
         </div>
       </div>
     </div>

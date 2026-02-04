@@ -1,45 +1,86 @@
 // db_flow_1.1: server setup with db initialization
 
-import { routes } from './routes.js';
 import Hapi from "@hapi/hapi";
 import Handlebars from "handlebars";
+import Cookie from "@hapi/cookie";
 import Vision from "@hapi/vision";
-import { db } from './src/models/db.js';
+import dotenv from "dotenv";
+import path from "path";
 
+import { routes } from "./routes.js";
+import { db } from "./src/models/db.js";
+
+dotenv.config();
+
+const __dirname = path.resolve();
 
 const init = async () => {
+  const server = Hapi.server({
+    port: 3000,
+    host: "localhost",
+    routes: {
+      files: {
+        relativeTo: "./" + __dirname,
+      },
+    },
+  });
 
-    const server = Hapi.server({
-        port: 3000,
-        host: 'localhost'
-    });
+  // Initialize database
+  await db.init();
 
-    server.route(routes);
+  await server.register(Vision);
+  await server.register(Cookie);
 
-    // Initialize database
-    await db.init();
+  server.views({
+    engines: {
+      hbs: Handlebars,
+    },
+    relativeTo: __dirname + "/src",
+    path: "views",
+    partialsPath: "./views/partials",
+    layout: true,
+    layoutPath: "./views/layouts",
+  });
 
-    await server.register(Vision);
+  const cookieName = process.env.cookie_name;
+  const cookiePassword = process.env.cookie_password;
 
-    server.views({
-        engines: {
-            hbs: Handlebars
-        },
-        relativeTo: ".",
-        path: 'src/views',
-        partialsPath: './src/views/partials',
-        layout: true,
-        layoutPath: './src/views/layouts'
-    });
+  server.app.cookieName = cookieName;
+  console.log("COOKIE_NAME: ", server.app.cookieName);
+  console.log("COOKIE_PASS: ", cookiePassword);
 
-    await server.start();
-    console.log('Server running on %s', server.info.uri);
+  server.auth.strategy("session", "cookie", {
+    cookie: {
+      name: cookieName,
+      password: cookiePassword,
+      isSecure: false, // TODO: set to true in production
+      path: "/", // I spend 2 days trying to figure out why my cookies didn't work. NO INFORMAITION ONLINE ABOUT PATH USAGE!
+    },
+    validate: async (request, session) => {
+      if (!session || !session.id) {
+        return { isValid: false };
+      }
+
+      const account = await db.usersStore.getUserById(session.id);
+      if (!account) {
+        return { isValid: false };
+      }
+      return { isValid: true, credentials: account };
+    },
+    redirectTo: "/login",
+  });
+
+  server.auth.default("session");
+
+  server.route(routes);
+
+  await server.start();
+  console.log("Server running on %s", server.info.uri);
 };
 
-process.on('unhandledRejection', (err) => {
-
-    console.log(err);
-    process.exit(1);
+process.on("unhandledRejection", (err) => {
+  console.log(err);
+  process.exit(1);
 });
 
 init();
