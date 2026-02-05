@@ -1,6 +1,4 @@
 // db_flow_3: uses the initialized stores in controller functions
-
-import { info } from "node:console";
 import { db } from "../models/db.js";
 
 export const accountController = {

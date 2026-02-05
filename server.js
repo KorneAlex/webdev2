@@ -6,14 +6,21 @@ import Cookie from "@hapi/cookie";
 import Vision from "@hapi/vision";
 import dotenv from "dotenv";
 import path from "path";
+import Joi from "joi";
 
+// my modules
 import { routes } from "./routes.js";
 import { db } from "./src/models/db.js";
 
 dotenv.config();
 
+// variables
 const __dirname = path.resolve();
 
+// Initialize database
+await db.init();
+
+//server
 const init = async () => {
   const server = Hapi.server({
     port: 3000,
@@ -25,12 +32,16 @@ const init = async () => {
     },
   });
 
-  // Initialize database
-  await db.init();
+  // modules and plugins
+  await server.register([
+    { plugin: Vision },
+    { plugin: Cookie },
+  ]);
 
-  await server.register(Vision);
-  await server.register(Cookie);
+  // validator
+  // server.validate(Joi);
 
+  // hapi Vision configuration for handlebars
   server.views({
     engines: {
       hbs: Handlebars,
@@ -42,6 +53,7 @@ const init = async () => {
     layoutPath: "./views/layouts",
   });
 
+  // authentication with cookies
   const cookieName = process.env.cookie_name;
   const cookiePassword = process.env.cookie_password;
 
