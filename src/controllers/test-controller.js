@@ -1,4 +1,4 @@
-import Joi from "joi";
+import { testSchema } from "../models/joi-schema.js";
 
 export const testController = {
   test: (request, h) => {
@@ -10,10 +10,9 @@ export const testController = {
 
   testSubmit: {
     options: {
+      auth: false,
       validate: {
-        payload: Joi.object({
-          testInput: Joi.string().min(3).required(),
-        }),
+        payload: testSchema,
         failAction: (request, h, err) => {
           const viewData = {
             isAuthenticated: request.auth.isAuthenticated,

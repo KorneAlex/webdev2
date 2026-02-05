@@ -2,15 +2,13 @@
 
 import { mainController } from './src/controllers/main-controller.js';
 import { accountController } from './src/controllers/accounts-controller.js';
-import { testSchema } from './src/models/joi-schema.js';
 import { testController } from './src/controllers/test-controller.js';
-import test from 'node:test';
 
 
 export const routes = [
     // pages
     { method: 'GET', path: '/', handler: mainController.index, options: { auth: { mode: 'try' } } },
-    { method: 'GET', path: '/about', handler: mainController.about},
+    { method: 'GET', path: '/about', handler: mainController.about, options: { auth: { mode: 'try' } } },
     { method: 'GET', path: '/dashboard', handler: mainController.dashboard },
 
     // account pages
@@ -18,7 +16,7 @@ export const routes = [
     { method: 'GET', path: '/signup', handler: accountController.signup, options: { auth: false } },
     
     // account actions
-    { method: 'POST', path: '/signup/submit', handler: accountController.signupSubmit, options: { auth: false } },
+    { method: 'POST', path: '/signup/submit', handler: accountController.signupSubmit.handler, options: accountController.signupSubmit.options },
     { method: 'POST', path: '/login/submit', handler: accountController.loginSubmit, options: { auth: false } },
     { method: 'GET', path: '/logout', handler: accountController.logout, options: { auth: false } },
     
