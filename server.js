@@ -26,7 +26,7 @@ const init = async () => {
     host: "localhost",
     routes: {
       files: {
-        relativeTo: "./" + __dirname,
+        relativeTo: __dirname,
       },
     },
   });
@@ -47,9 +47,9 @@ const init = async () => {
     },
     relativeTo: __dirname + "/src",
     path: "views",
-    partialsPath: "./views/partials",
     layout: true,
     layoutPath: "./views/layouts",
+    partialsPath: "./views/partials",
   });
 
   // authentication with cookies

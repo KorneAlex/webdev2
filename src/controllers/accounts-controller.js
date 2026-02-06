@@ -3,31 +3,35 @@ import { db } from "../models/db.js";
 import { signupSchema } from "../models/joi-schema.js";
 
 export const accountController = {
-  signup: (request, h) => {
-    const viewData = {
-      isAuthenticated: request.auth.isAuthenticated,
-    };
-    return h.view("./pages/signup", {
-      title: "signup Page",
-      viewData: viewData,
-    });
+  signup: {
+    auth: { mode: "try" },
+    handler: (request, h) => {
+      const viewData = {
+        isAuthenticated: request.auth.isAuthenticated,
+      };
+      if (request.auth.isAuthenticated) {
+        return h.redirect("/dashboard");
+      }
+      return h.view("./pages/signup", {
+        title: "signup Page",
+        viewData: viewData,
+      });
+    },
   },
 
   signupSubmit: {
-    options: {
-      auth: false,
-      validate: {
-        payload: signupSchema,
-        failAction: (request, h, err) => {
-          const viewData = {
-            isAuthenticated: request.auth.isAuthenticated,
-            infoMessage: err.details[0].message,
-            infoClass: "has-text-danger",
-          };
-          return h
+    auth: false,
+    validate: {
+      payload: signupSchema,
+      failAction: (request, h, err) => {
+        const viewData = {
+          isAuthenticated: request.auth.isAuthenticated,
+          infoMessage: err.details[0].message,
+          infoClass: "has-text-danger",
+        };
+        return h
           .view("./pages/signup", { title: "Signup Page", viewData })
           .takeover();
-        },
       },
     },
     handler: async (request, h) => {
@@ -46,34 +50,48 @@ export const accountController = {
     },
   },
 
-  login: (request, h) => {
-    const viewData = {
-      isAuthenticated: request.auth.isAuthenticated,
-    };
-    return h.view("./pages/login", { title: "Login Page", viewData: viewData });
+  login: {
+    auth: { mode: "try" },
+    handler: (request, h) => {
+      const viewData = {
+        isAuthenticated: request.auth.isAuthenticated,
+      };
+      if (request.auth.isAuthenticated) {
+        return h.redirect("/dashboard");
+      }
+      return h.view("./pages/login", {
+        title: "Login Page",
+        viewData: viewData,
+      });
+    },
   },
 
   // TODO: add anti-sql injection (Joi) to loginSubmit and signupSubmit
-  loginSubmit: async (request, h) => {
-    const { emailOrUsername, password } = request.payload;
-
-    const user = await db.usersStore.userCheck(emailOrUsername, password);
-    if (!user) {
-      return h.view("./pages/login", {
-        title: "Login Page",
-        viewData: {
-          infoMessage: "Invalid credentials. Please try again.",
-          infoClass: "has-text-danger",
-        },
-      });
-    }
-
-    request.cookieAuth.set({ id: user._id });
-    return h.redirect("/dashboard");
+  loginSubmit: {
+    auth: false,
+    handler: async (request, h) => {
+      console.log("loginSubmit: request.payload: ", request.payload);
+      const { emailOrUsername, password } = request.payload;
+      console.log("loginSubmit: emailOrUsername: ", emailOrUsername, " password: ", password);
+      const user = await db.usersStore.credentialsCheck(emailOrUsername, emailOrUsername, password);
+      if (!user) {
+        return h.view("./pages/login", {
+          title: "Login Page",
+          viewData: {
+            infoMessage: "Invalid credentials. Please try again.",
+            infoClass: "has-text-danger",
+          },
+        });
+      }
+      request.cookieAuth.set({ id: user._id });
+      return h.redirect("/dashboard");
+    },
   },
 
-  logout: (request, h) => {
-    request.cookieAuth.clear();
-    return h.redirect("/");
+  logout: {
+    handler: (request, h) => {
+      request.cookieAuth.clear();
+      return h.redirect("/");
+    },
   },
 };

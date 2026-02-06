@@ -12,13 +12,14 @@ export const routes = [
     { method: 'GET', path: '/dashboard', handler: mainController.dashboard },
 
     // account pages
-    { method: 'GET', path: '/login', handler: accountController.login, options: { auth: false } },
-    { method: 'GET', path: '/signup', handler: accountController.signup, options: { auth: false } },
+    { method: 'GET', path: '/login', config: accountController.login },
+    { method: 'GET', path: '/signup', config: accountController.signup },
     
     // account actions
-    { method: 'POST', path: '/signup/submit', handler: accountController.signupSubmit.handler, options: accountController.signupSubmit.options },
-    { method: 'POST', path: '/login/submit', handler: accountController.loginSubmit, options: { auth: false } },
-    { method: 'GET', path: '/logout', handler: accountController.logout, options: { auth: false } },
+    // { method: 'POST', path: '/signup/submit', handler: accountController.signupSubmit.handler, options: accountController.signupSubmit.options },
+    { method: 'POST', path: '/signup/submit', config: accountController.signupSubmit },
+    { method: 'POST', path: '/login/submit', config: accountController.loginSubmit },
+    { method: 'GET', path: '/logout', config: accountController.logout },
     
     // test
     { method: 'GET', path: '/test', handler: testController.test, options: { auth: { mode: "try"} } },
