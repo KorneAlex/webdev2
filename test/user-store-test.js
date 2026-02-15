@@ -1,16 +1,15 @@
 import M from "mocha";
 import { assert } from "chai";
 import { db } from "../src/models/db.js";
-import { db as storeDb } from "../src/utils/store-utils.js";
 
 export const userStoreTest = M.suite("User Store Tests", () => {
-  let lastIndex;
+  // let lastIndex;
   M.before(async () => {
     await db.init();
-    if (db.usersStore) {
-      const users = await db.usersStore.getAllUsers();
-      lastIndex = users.length - 1;
-    }
+    // if (db.usersStore) {
+    //   const users = await db.usersStore.getAllUsers();
+    //   lastIndex = users.length - 1;
+    // }
   });
 
   M.describe("Create Users", () => {
@@ -25,7 +24,7 @@ export const userStoreTest = M.suite("User Store Tests", () => {
 
     M.it("regular user", async () => {
       const user = await db.usersStore.addUser(regular);
-      assert.isNotNull(user), "user was not created";
+      assert.isNotNull(user, "user was not created");
       assert.equal(user.username, regular.username);
       assert.equal(user.email, regular.email);
     });
@@ -36,8 +35,9 @@ export const userStoreTest = M.suite("User Store Tests", () => {
 
     M.after(async () => {
       const users = await db.usersStore.getAllUsers();
-      storeDb.data.users = users.slice(0, lastIndex + 1);
-      await storeDb.write();
+      for (const user of users) {
+        await db.usersStore.deleteUserById(user._id);
+      }
     });
   });
 });

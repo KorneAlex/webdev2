@@ -1,11 +1,11 @@
-// db_flow_2: facade. initialize stores to be used in controllers
-
-import { usersJsonStore } from "./json/users-json-store.js";
+import { connect } from "./mongodb/db.js";
+import { usersStore } from "./mongodb/user-mongodb-store.js";
 
 export const db = {
-    usersStore: null,
+  usersStore: null,
 
-    async init() {
-        this.usersStore = usersJsonStore;
-    }
-};  
+  async init() {
+    await connect();
+    this.usersStore = usersStore;
+  },
+};

@@ -3,7 +3,6 @@ export const mainController = {
     const viewData = {
         isAuthenticated: request.auth.isAuthenticated,
     };
-    // console.log("[ INDEX ]: ", JSON.stringify(request.auth));
     return h.view("index", {
       title: "Home Page",
       message: `Welcome to the Home Page!`,
@@ -19,11 +18,9 @@ export const mainController = {
   },
 
   dashboard: (request, h) => {
-    // console.log("[ DASHBOARD ]: ", JSON.stringify(request.auth));
     const viewData = {
         isAuthenticated: request.auth.isAuthenticated,
     };
-    // console.log("[ DASHBOARD ]: ", request.auth.isAuthenticated);
     return h.view("./pages/dashboard", { title: "Dashboard", viewData: viewData });
   },
 };

@@ -1,11 +1,14 @@
 {
   "name": "webdev2",
   "version": "1.0.0",
-  "description": "",
+  "description": "New project Practice creating the site from the scratch using Node.js, Hapi, Joi, Handlebars",
   "license": "MIT",
   "author": "OleksandrKorniienko",
   "type": "module",
   "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "test": "mocha test/test.js",
     "start": "node server.js",
@@ -22,11 +25,10 @@
     "handlebars": "^4.7.8",
     "hapi": "^18.1.0",
     "joi": "^18.0.2",
-    "lowdb": "^7.0.1",
+    "mongoose": "^9.1.6",
     "node": "^25.5.0",
     "nodemon": "^3.1.11",
-    "requirejs": "^2.3.8",
-    "uuid": "^13.0.0"
+    "requirejs": "^2.3.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

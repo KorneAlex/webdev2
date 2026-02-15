@@ -35,7 +35,7 @@ export const accountController = {
       },
     },
     handler: async (request, h) => {
-      const payload = request.payload;
+      const {payload} = request;
 
       const viewData = {
         isAuthenticated: request.auth.isAuthenticated,
@@ -70,9 +70,7 @@ export const accountController = {
   loginSubmit: {
     auth: false,
     handler: async (request, h) => {
-      console.log("loginSubmit: request.payload: ", request.payload);
       const { emailOrUsername, password } = request.payload;
-      console.log("loginSubmit: emailOrUsername: ", emailOrUsername, " password: ", password);
       const user = await db.usersStore.credentialsCheck(emailOrUsername, emailOrUsername, password);
       if (!user) {
         return h.view("./pages/login", {
