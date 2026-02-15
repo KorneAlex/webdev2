@@ -23,7 +23,7 @@ await db.init();
 const init = async () => {
   const server = Hapi.server({
     port: 3000,
-    host: "localhost",
+    host: process.env.HOST || "localhost",
     routes: {
       files: {
         relativeTo: __dirname,

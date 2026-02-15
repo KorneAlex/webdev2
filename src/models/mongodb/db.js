@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/webdev2";
+const mongoUrl = "mongodb://127.0.0.1:27017/webdev2" // for local tests
+// const mongoUrl = "mongodb://mongo:27017/webdev2" // for docker
 
 export async function connect() {
   await mongoose.connect(mongoUrl, {

@@ -1,0 +1,37 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      HOST: "0.0.0.0"
+      MONGO_URL: mongodb://mongo:27017/webdev2
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - appnet
+    env_file:
+      - .env
+
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    networks:
+      - appnet
+
+volumes:
+  mongo_data:
+
+networks:
+  appnet:
+    driver: bridge
